@@ -1,3 +1,6 @@
+// 稀疏矩阵默认绝大多数元素为0
+// main函数用于创建测试集并比较与朴素矩阵的性能 使用时需要在debug文件夹创建input和output文件夹
+
 #include <iostream>
 #include <ctime>
 #include <random>
