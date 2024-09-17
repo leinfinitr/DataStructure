@@ -21,19 +21,19 @@ int main() {
 
     // 初始化随机数种子
     std::default_random_engine e;
-    std::uniform_int_distribution<int> u(0,100); // 左闭右闭区间
+    std::uniform_int_distribution<int> u(0, 100); // 左闭右闭区间
     e.seed(time(0));
 
     // 创建测试数据
     std::ofstream out;
-    for(int i = 0; i < num_case; ++i){
+    for (int i = 0; i < num_case; ++i) {
         // 创建左矩阵
         out.open("input/" + grade_cases[i] + ".left");
         out << size_cases[i] << " " << size_cases[i] << "\n";
         for (int j = 0; j < size_cases[i]; ++j) {
             for (int k = 0; k < size_cases[i]; ++k) {
                 int rand = u(e);
-                if(rand > ratio)
+                if (rand > ratio)
                     out << j << " " << k << " " << rand << "\n";
             }
         }
@@ -44,7 +44,7 @@ int main() {
         for (int j = 0; j < size_cases[i]; ++j) {
             for (int k = 0; k < size_cases[i]; ++k) {
                 int rand = u(e);
-                if(rand > ratio)
+                if (rand > ratio)
                     out << j << " " << k << " " << rand << "\n";
             }
         }
@@ -56,7 +56,7 @@ int main() {
     LARGE_INTEGER nFreq;
     LARGE_INTEGER nBeginTime;
     LARGE_INTEGER nEndTime;
-    for (const auto& test_case : grade_cases) {
+    for (const auto &test_case: grade_cases) {
         SparseMatrix left = SparseMatrix("input/" + test_case + ".left");
         SparseMatrix right = SparseMatrix("input/" + test_case + ".right");
         QueryPerformanceFrequency(&nFreq);
@@ -64,13 +64,13 @@ int main() {
         SparseMatrix ans = left * right;
         QueryPerformanceCounter(&nEndTime);
         ans.creat_vector_col();
-        time = (double)(nEndTime.QuadPart-nBeginTime.QuadPart) / (double)nFreq.QuadPart;
+        time = (double) (nEndTime.QuadPart - nBeginTime.QuadPart) / (double) nFreq.QuadPart;
         std::cout << time * 1000 << " ";
     }
     std::cout << "\n";
 
     // 记录使用朴素矩阵乘法所需时间
-    for (const auto& test_case : grade_cases) {
+    for (const auto &test_case: grade_cases) {
         // 朴素矩阵的创建与相乘
         // 左矩阵
         int row_left, col_left;
@@ -79,14 +79,14 @@ int main() {
         int **left;
         left = new int *[row_left];
         for (int i = 0; i < row_left; ++i)
-            left[i] = new int [col_left];
+            left[i] = new int[col_left];
         for (int i = 0; i < row_left; ++i)
             for (int j = 0; j < col_left; ++j)
                 left[i][j] = 0;
         int row, col, val;
-        while (in >> row){
+        while (in >> row) {
             in >> col >> val;
-            if(val == 0) continue;
+            if (val == 0) continue;
             left[row][col] = val;
         }
         in.close();
@@ -97,13 +97,13 @@ int main() {
         int **right;
         right = new int *[row_right];
         for (int i = 0; i < row_right; ++i)
-            right[i] = new int [col_right];
+            right[i] = new int[col_right];
         for (int i = 0; i < row_right; ++i)
             for (int j = 0; j < col_right; ++j)
                 right[i][j] = 0;
-        while (in >> row){
+        while (in >> row) {
             in >> col >> val;
-            if(val == 0) continue;
+            if (val == 0) continue;
             right[row][col] = val;
         }
         in.close();
@@ -113,7 +113,7 @@ int main() {
         QueryPerformanceFrequency(&nFreq);
         QueryPerformanceCounter(&nBeginTime);
         for (int i = 0; i < row_left; ++i)
-            res[i] = new int [col_right];
+            res[i] = new int[col_right];
         for (int i = 0; i < row_left; ++i)
             for (int j = 0; j < col_right; ++j)
                 res[i][j] = 0;
@@ -124,17 +124,17 @@ int main() {
 
         // 释放动态空间
         for (int i = 0; i < row_left; ++i)
-            delete [] left[i];
+            delete[] left[i];
         for (int i = 0; i < row_right; ++i)
-            delete [] right[i];
+            delete[] right[i];
         for (int i = 0; i < row_left; ++i)
-            delete [] res[i];
-        delete [] left;
-        delete [] right;
-        delete [] res;
+            delete[] res[i];
+        delete[] left;
+        delete[] right;
+        delete[] res;
 
         QueryPerformanceCounter(&nEndTime);
-        time = (double)(nEndTime.QuadPart-nBeginTime.QuadPart) / (double)nFreq.QuadPart;
+        time = (double) (nEndTime.QuadPart - nBeginTime.QuadPart) / (double) nFreq.QuadPart;
         std::cout << time * 1000 << " ";
     }
 

@@ -6,33 +6,32 @@
 #include <string>
 #include <vector>
 
-class RandGenerator
-{
+class RandGenerator {
 private:
     uint64_t seed = 0;
-    constexpr static int32_t BASE = 1103515245;
-    constexpr static int32_t OFFSET = 12345;
-    constexpr static int32_t MOD = 1e9 + 7;
+    constexpr static int32_t
+    BASE = 1103515245;
+    constexpr static int32_t
+    OFFSET = 12345;
+    constexpr static int32_t
+    MOD = 1e9 + 7;
 
 public:
-    uint32_t treap_rand()
-    {
+    uint32_t treap_rand() {
         seed = (BASE * seed + OFFSET) % MOD;
         return seed;
     }
 
-    void reset()
-    {
+    void reset() {
         seed = 0;
     }
 };
 
-template <typename T>
+template<typename T>
 class Treap;
 
-template <typename T>
-class TreapNode
-{
+template<typename T>
+class TreapNode {
 
 private:
     T val;
@@ -41,6 +40,7 @@ private:
     int32_t count; /* number of repeated elements contained in current node */
     int32_t size;  /* number of nodes in current subtree */
     uint32_t weight;
+
     friend class Treap<T>;
 
 public:
@@ -51,9 +51,8 @@ public:
                                                                           count(count), size(size), weight(weight) {}
 };
 
-template <typename T>
-class Treap
-{
+template<typename T>
+class Treap {
 
 private:
     RandGenerator rand;
@@ -62,22 +61,17 @@ private:
     TreapNode<T> *treap_root = nullptr;
 
 public:
-    void insert(T val)
-    {
-        /* Your code here. */
+    void insert(T val) {
         // 分裂操作
         TreapNode<T> *left_root = nullptr, *right_root = nullptr;
         split(treap_root, left_root, right_root, val);
         // 若左子树中存在该节点，则 count++
         // 若不存在在则创建新节点
         TreapNode<T> *res = nullptr, *new_node = nullptr;
-        if (search(left_root, val, res))
-        {
+        if (search(left_root, val, res)) {
             res->count++;
             return;
-        }
-        else
-        {
+        } else {
             new_node = new TreapNode<T>;
             new_node->val = val;
             new_node->count = 1;
@@ -93,9 +87,7 @@ public:
         size++;
     }
 
-    void remove(T val)
-    {
-        /* Your code here. */
+    void remove(T val) {
         // 将树划分为⼩于等于val的左⼦树和大于val的sub右⼦树
         TreapNode<T> *left_root = nullptr, *right_root = nullptr;
         split(treap_root, left_root, right_root, val);
@@ -104,12 +96,10 @@ public:
         split(left_root, sub_left_root, sub_right_root, val - 1);
         // 如果sub右⼦树存在，则将其count--
         // 如果count为0，则删除该节点
-        if (sub_right_root != nullptr)
-        {
+        if (sub_right_root != nullptr) {
             if (sub_right_root->count > 1)
                 sub_right_root->count--;
-            else
-            {
+            else {
                 delete sub_right_root;
                 sub_right_root = nullptr;
                 size--;
@@ -124,18 +114,14 @@ public:
     /*
     @brief  查询 val 的前驱
      */
-    T pre_element(T val)
-    {
-        /* Your code here. */
+    T pre_element(T val) {
         // 查询 val 的排名
         int32_t rk = rank(val);
         // 若val不存在，则返回中遍历中比val小的最大值
-        if (rk == -1)
-        {
-            std::vector<T> vec;
+        if (rk == -1) {
+            std::vector <T> vec;
             in_traverse(treap_root, vec);
-            for (int i = vec.size() - 1; i >= 0; i--)
-            {
+            for (int i = vec.size() - 1; i >= 0; i--) {
                 if (vec[i] < val)
                     return vec[i];
             }
@@ -148,18 +134,14 @@ public:
     /*
     @brief  查询 val 的后继
     */
-    T suc_element(T val)
-    {
-        /* Your code here. */
+    T suc_element(T val) {
         // 查询 val 的排名
         int32_t rk = rank(val);
         // 若val不存在，则返回中遍历中比val大的最小值
-        if (rk == -1)
-        {
-            std::vector<T> vec;
+        if (rk == -1) {
+            std::vector <T> vec;
             in_traverse(treap_root, vec);
-            for (int i = 0; i < vec.size(); i++)
-            {
+            for (int i = 0; i < vec.size(); i++) {
                 if (vec[i] > val)
                     return vec[i];
             }
@@ -173,15 +155,12 @@ public:
     @brief  查询 val 的排名
     @return 返回 val 的排名
     */
-    int32_t rank(T val)
-    {
-        /* Your code here. */
+    int32_t rank(T val) {
         // 得到整棵树中序遍历的结果
-        std::vector<T> vec;
+        std::vector <T> vec;
         in_traverse(treap_root, vec);
         // 在vec中查找val的排名
-        for (int i = 0; i < vec.size(); i++)
-        {
+        for (int i = 0; i < vec.size(); i++) {
             if (vec[i] == val)
                 return i + 1;
         }
@@ -191,11 +170,9 @@ public:
     /*
     @brief 查询排名为 rk 的元素
     */
-    int32_t kth_element(int32_t rk)
-    {
-        /* Your code here. */
+    int32_t kth_element(int32_t rk) {
         // 得到整棵树前序遍历的结果
-        std::vector<T> vec;
+        std::vector <T> vec;
         in_traverse(treap_root, vec);
         // 返回排名为 rk 的元素
         if (rk > vec.size() || rk < 1)
@@ -206,15 +183,12 @@ public:
     /*
     @brief 删除整棵树并释放动态内存
     */
-    void clear()
-    {
-        /* Your code here. */
+    void clear() {
         if (treap_root == nullptr)
             return;
-        std::stack<TreapNode<T> *> stack;
+        std::stack < TreapNode<T> * > stack;
         stack.push(treap_root);
-        while (!stack.empty())
-        {
+        while (!stack.empty()) {
             TreapNode<T> *cur = stack.top();
             stack.pop();
             if (cur->left)
@@ -230,18 +204,15 @@ public:
     /*
     @brief  前序遍历整棵树
     */
-    std::string pre_traverse()
-    {
-        /* Your code here. */
+    std::string pre_traverse() {
         if (treap_root == nullptr)
             return "empty";
         std::string res;
         // 将前序遍历结果存储在vector中
-        std::vector<T> vec;
+        std::vector <T> vec;
         pre_traverse(treap_root, vec);
         // 将vector中的元素转换为字符串
-        for (auto &i : vec)
-        {
+        for (auto &i: vec) {
             res += std::to_string(i);
             res += " ";
         }
@@ -251,9 +222,7 @@ public:
     /*
     @brief 前序遍历以root为根的树, 并将结果存储在vec中
     */
-    void pre_traverse(TreapNode<T> *root, std::vector<T> &vec)
-    {
-        /* Your code here. */
+    void pre_traverse(TreapNode<T> *root, std::vector <T> &vec) {
         if (root == nullptr)
             return;
         vec.push_back(root->val);
@@ -264,9 +233,7 @@ public:
     /*
     @brief 中序遍历以root为根的树, 并将结果存储在vec中
     */
-    void in_traverse(TreapNode<T> *root, std::vector<T> &vec)
-    {
-        /* Your code here. */
+    void in_traverse(TreapNode<T> *root, std::vector <T> &vec) {
         if (root == nullptr)
             return;
         in_traverse(root->left, vec);
@@ -281,18 +248,15 @@ public:
      * @param right_root 分裂后的右⼦树根
      * @param value 分裂值
      */
-    void split(TreapNode<T> *root, TreapNode<T> *&left_root, TreapNode<T> *&right_root, T value)
-    {
+    void split(TreapNode<T> *root, TreapNode<T> *&left_root, TreapNode<T> *&right_root, T value) {
         if (root == nullptr)
             return;
         left_root = root;
         right_root = root;
-        if (value >= root->val)
-        {
+        if (value >= root->val) {
             while (right_root->right && right_root->right->val <= value)
                 right_root = right_root->right;
-            if (!right_root->right)
-            {
+            if (!right_root->right) {
                 right_root = nullptr;
                 return;
             }
@@ -302,13 +266,10 @@ public:
             right_root->right = sub_left;
             tmp->left = sub_right;
             right_root = tmp;
-        }
-        else
-        {
+        } else {
             while (left_root->left && left_root->left->val > value)
                 left_root = left_root->left;
-            if (!left_root->left)
-            {
+            if (!left_root->left) {
                 left_root = nullptr;
                 return;
             }
@@ -328,12 +289,10 @@ public:
         @param res 查找结果
         @return 是否存在
     */
-    bool search(TreapNode<T> *root, T val, TreapNode<T> *&res)
-    {
+    bool search(TreapNode<T> *root, T val, TreapNode<T> *&res) {
         if (root == nullptr)
             return false;
-        if (root->val == val)
-        {
+        if (root->val == val) {
             res = root;
             return true;
         }
@@ -350,21 +309,17 @@ public:
     @param right_node 右树根
     @return 合并后的树根
     */
-    TreapNode<T> *merge(TreapNode<T> *left_node, TreapNode<T> *right_node)
-    {
+    TreapNode<T> *merge(TreapNode<T> *left_node, TreapNode<T> *right_node) {
         if (left_node == nullptr)
             return right_node;
         if (right_node == nullptr)
             return left_node;
         // 保持最大堆性质
         TreapNode<T> *res = nullptr;
-        if (left_node->weight >= right_node->weight)
-        {
+        if (left_node->weight >= right_node->weight) {
             left_node->right = merge(left_node->right, right_node);
             res = left_node;
-        }
-        else
-        {
+        } else {
             right_node->left = merge(left_node, right_node->left);
             res = right_node;
         }
@@ -372,22 +327,19 @@ public:
     }
 
     // 得到整棵树的高度
-    int get_height()
-    {
+    int get_height() {
         return get_height(treap_root);
     }
 
     // 得到以root为根的树的高度
-    int get_height(TreapNode<T> *root)
-    {
+    int get_height(TreapNode<T> *root) {
         if (root == nullptr)
             return 0;
         return std::max(get_height(root->left), get_height(root->right)) + 1;
     }
 
     // 得到整棵树的节点数
-    int32_t get_size()
-    {
+    int32_t get_size() {
         return size;
     }
 };

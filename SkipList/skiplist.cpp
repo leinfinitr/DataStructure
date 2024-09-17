@@ -1,7 +1,3 @@
-//
-// Created by LEinfinitr on 2023/2/27.
-//
-
 #include "skiplist.h"
 
 // 从跳表中查找数值，返回值为是否存在该数值

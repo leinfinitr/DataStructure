@@ -1,7 +1,3 @@
-//
-// Created by LEinfinitr on 2023/2/27.
-//
-
 #ifndef HW2_SKIPLIST_H
 #define HW2_SKIPLIST_H
 

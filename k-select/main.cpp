@@ -4,22 +4,17 @@
 
 using namespace std;
 
-// 精确测试函数的运行时间
-
-int main()
-{
+int main() {
     // 数据集规模
     int size[] = {100, 500, 1000, 2000, 3000};
     int sizeNum = sizeof(size) / sizeof(int);
     // 顺序测试集
-    vector<vector<int>> ordered;
+    vector <vector<int>> ordered;
     // 乱序测试集
-    vector<vector<int>> unordered;
-    for (int i = 0; i < sizeNum; i++)
-    {
+    vector <vector<int>> unordered;
+    for (int i = 0; i < sizeNum; i++) {
         vector<int> o, u;
-        for (int j = 0; j < size[i]; j++)
-        {
+        for (int j = 0; j < size[i]; j++) {
             o.push_back(j);
             u.push_back(rand());
         }
@@ -74,26 +69,23 @@ int main()
     // 测试 linearSelect 的分组规模分别为 5、10、15、20、25 时的性能
     int Q[] = {5, 10, 15, 20, 25};
     int QNum = sizeof(Q) / sizeof(int);
-    for (int i = 0; i < sizeNum; i++)
-    {
+    for (int i = 0; i < sizeNum; i++) {
         cout << "size: " << size[i] << endl;
         cout << "ordered: " << endl;
-        for (int j = 0; j < QNum; j++)
-        {
+        for (int j = 0; j < QNum; j++) {
             clock_t start = clock();
             for (int k = 0; k < size[i]; k++)
                 linearSelect(ordered[i], k, Q[j]);
             clock_t end = clock();
-            cout << "Q = " << Q[j] << ": " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
+            cout << "Q = " << Q[j] << ": " << (double) (end - start) / CLOCKS_PER_SEC << "s" << endl;
         }
         cout << "unordered: " << endl;
-        for (int j = 0; j < QNum; j++)
-        {
+        for (int j = 0; j < QNum; j++) {
             clock_t start = clock();
             for (int k = 0; k < size[i]; k++)
                 linearSelect(unordered[i], k, Q[j]);
             clock_t end = clock();
-            cout << "Q = " << Q[j] << ": " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
+            cout << "Q = " << Q[j] << ": " << (double) (end - start) / CLOCKS_PER_SEC << "s" << endl;
         }
     }
 }

@@ -3,14 +3,13 @@
 
 using namespace std;
 
-// int m = 2000;    // 哈希数组大小
+int m = 20000;    // 哈希数组大小
 int n = 10000;    // 集合中插入的元素个数
-// int k = 4; // 哈希函数个数
 
-hash<string> hash1;
+hash <string> hash1;
 
 int main() {
-    for(int m = 20000; m <= 50000; m += 10000) {
+    for (; m <= 50000; m += 10000) {
         for (int k = 1; k <= 8; k++) {
             // 构建大小为 m 的哈希数组
             int *hash_table = new int[m]();

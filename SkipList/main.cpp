@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
     Skiplist skiplist;
-    for (int i = 1; i <= 100 ; ++i)
+    for (int i = 1; i <= 100; ++i)
         skiplist.insert(i);
 
     cout << "skiplist level : " << skiplist.level << endl;
